@@ -43,7 +43,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     public Flux<Movement> findMovementsByAccountNumber(String accountNumber) {
 
-        log.info("ini----findLastMovementByAccountNumber-------: ");
+        log.info("ini----findMovementsByAccountNumber-------: ");
         WebClientConfig webconfig = new WebClientConfig();
         Flux<Movement> alerts = webconfig.setUriData("http://localhost:8091/")
                 .flatMap(d -> {
@@ -82,8 +82,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         log.info("ini----findByDocumentNumber-------documentNumber, accountType : " + documentNumber + " --- " + accountType);
         return bankAccountRepository.findByAccountClient(documentNumber, accountType)
                 .flatMap(d -> {
-                    log.info("ini----findByAccountClient-------: ");
-                    return findLastMovementByAccountNumber(documentNumber)
+                    log.info("ini----findByAccountClient-------documentNumber: " + documentNumber);
+                    log.info("ini----findByAccountClient-------d.getAccountNumber(): " + d.getAccountNumber());
+                    return findLastMovementByAccountNumber(d.getAccountNumber())
                             .switchIfEmpty(Mono.defer(() -> {
                                 log.info("----2 switchIfEmpty-------: ");
                                 Movement mv = Movement.builder()

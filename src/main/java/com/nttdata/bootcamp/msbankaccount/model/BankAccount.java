@@ -2,12 +2,12 @@ package com.nttdata.bootcamp.msbankaccount.model;
 
 import java.util.Date;
 import java.util.List;
-import lombok.Setter;
-import lombok.Getter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
+import com.nttdata.bootcamp.msbankaccount.exception.ResourceNotFoundException;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -16,22 +16,26 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Builder
 public class BankAccount {
 
     @Id
     private String idBankAccount;
 
+    private Client client;
+
     @NotEmpty(message = "no debe estar vacío")
     private String accountType;
 
-    private Integer cardNumber;
+    private String cardNumber;
 
     @NotEmpty(message = "no debe estar vacío")
-    private Integer accountNumber;
+    private String accountNumber;
 
     private Double commission;
 
-    private Date movementDate;
+    private Integer movementDate;
 
     private Integer maximumMovement;
 
@@ -44,4 +48,6 @@ public class BankAccount {
     @NotEmpty(message = "no debe estar vacío")
     private String currency;
 
+
+    private Double  Balance;
 }

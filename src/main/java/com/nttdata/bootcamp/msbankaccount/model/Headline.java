@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Headline {
-
-    private Integer idHeadline;
     private String names;
     private String surnames;
     private String documentType;
-    private Integer documentNumber;
+    private String documentNumber;
 }

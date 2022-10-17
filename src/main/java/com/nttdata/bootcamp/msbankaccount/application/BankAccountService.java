@@ -10,6 +10,7 @@ public interface BankAccountService {
     public Mono<BankAccount> findById(String idBankAccount);
     public Mono<BankAccount> findByAccountNumber(String accountNumber);
     public Flux<BankAccount> findByDocumentNumber(String accountNumber, String accountType);
+    public Mono<BankAccountDto> findMovementsByDocumentNumber(String documentNumber, String accountNumber);
     public Mono<BankAccount> save(BankAccountDto bankAccountDto);
     public Mono<BankAccount> update(BankAccountDto bankAccountDto, String idBankAccount);
     public Mono<Void> delete(BankAccount bankAccount);

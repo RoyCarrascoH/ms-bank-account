@@ -7,6 +7,7 @@ import com.nttdata.bootcamp.msbankaccount.model.Client;
 import com.nttdata.bootcamp.msbankaccount.model.Movement;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,22 @@ public class BankAccountServiceImpl implements BankAccountService {
         );
     }
 
+    public Flux<Movement> findMovementsByAccountNumber(String accountNumber) {
+
+        log.info("ini----findLastMovementByAccountNumber-------: ");
+        WebClientConfig webconfig = new WebClientConfig();
+        Flux<Movement> alerts = webconfig.setUriData("http://localhost:8091/")
+                .flatMap(d -> {
+                    return webconfig.getWebclient().get()
+                            .uri("/api/movements/accountNumber/" + accountNumber)
+                            .retrieve()
+                            .bodyToFlux(Movement.class)
+                            .collectList();
+                })
+                .flatMapMany(iterable -> Flux.fromIterable(iterable));
+        return alerts;
+    }
+
     @Override
     public Flux<BankAccount> findAll() {
         return bankAccountRepository.findAll();
@@ -62,8 +79,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public Flux<BankAccount> findByDocumentNumber(String documentNumber, String accountType) {
         log.info("ini----findByDocumentNumber-------: ");
-        log.info("ini----findByDocumentNumber-------documentNumber, accountType : " +documentNumber + " --- "+ accountType );
-        return bankAccountRepository.findByAccountClient(documentNumber, accountType )
+        log.info("ini----findByDocumentNumber-------documentNumber, accountType : " + documentNumber + " --- " + accountType);
+        return bankAccountRepository.findByAccountClient(documentNumber, accountType)
                 .flatMap(d -> {
                     log.info("ini----findByAccountClient-------: ");
                     return findLastMovementByAccountNumber(documentNumber)
@@ -77,6 +94,24 @@ public class BankAccountServiceImpl implements BankAccountService {
                             .flatMap(m -> {
                                 log.info("----findByDocumentNumber setBalance-------: ");
                                 d.setBalance(m.getBalance());
+                                return Mono.just(d);
+                            });
+                });
+    }
+
+
+    @Override
+    public Mono<BankAccountDto> findMovementsByDocumentNumber(String documentNumber, String accountNumber) {
+        log.info("ini----findByDocumentNumber-------: ");
+        log.info("ini----findByDocumentNumber-------documentNumber, accountNumber : " + documentNumber + " --- " + accountNumber);
+        return bankAccountRepository.findByAccountAndDocumentNumber(documentNumber, accountNumber)
+                .flatMap(d -> {
+                    log.info("ini----findByAccountClient-------: ");
+                    return findMovementsByAccountNumber(accountNumber)
+                            .collectList()
+                            .flatMap(m -> {
+                                log.info("----findByDocumentNumber setBalance-------: ");
+                                d.setMovements(m);
                                 return Mono.just(d);
                             });
                 });

@@ -4,6 +4,7 @@ import com.nttdata.bootcamp.msbankaccount.exception.ResourceNotFoundException;
 import com.nttdata.bootcamp.msbankaccount.model.BankAccount;
 import com.nttdata.bootcamp.msbankaccount.model.Client;
 import com.nttdata.bootcamp.msbankaccount.model.Headline;
+import com.nttdata.bootcamp.msbankaccount.model.Movement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,6 +45,8 @@ public class BankAccountDto {
 
     @NotEmpty(message = "no debe estar vacío")
     private String currency;
+
+    private List<Movement> movements;
 
     public Mono<Boolean> validateFields() {
         log.info("validateFields-------: " );

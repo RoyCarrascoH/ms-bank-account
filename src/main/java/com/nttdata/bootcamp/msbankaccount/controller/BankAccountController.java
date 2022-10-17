@@ -44,18 +44,6 @@ public class BankAccountController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/documentNumber/{documentNumber}/AccountType/{accountType}")
-    public Mono<ResponseEntity<List<BankAccount>>> getBankAccountByDocumentNumberAndAccountType(@PathVariable("documentNumber") String documentNumber, @PathVariable("accountType") String accountType) {
-        return service.findByDocumentNumber(documentNumber, accountType)
-                .flatMap( mm ->{
-                    log.info("--getBankAccountByDocumentNumberAndAccountType-------: " + mm.toString());
-                    return Mono.just(mm);
-                })
-                .collectList()
-                .map(c -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(c))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
     @PostMapping
     public Mono<ResponseEntity<Map<String, Object>>> saveBankAccount(@Valid @RequestBody Mono<BankAccountDto> bankAccountDto) {
 
@@ -83,5 +71,24 @@ public class BankAccountController {
         return service.findById(idBankAccount).flatMap(c -> {
             return service.delete(c).then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)));
         }).defaultIfEmpty(new ResponseEntity<Void>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/documentNumber/{documentNumber}/AccountType/{accountType}")
+    public Mono<ResponseEntity<List<BankAccount>>> getBankAccountByDocumentNumberAndAccountType(@PathVariable("documentNumber") String documentNumber, @PathVariable("accountType") String accountType) {
+        return service.findByDocumentNumber(documentNumber, accountType)
+                .flatMap( mm ->{
+                    log.info("--getBankAccountByDocumentNumberAndAccountType-------: " + mm.toString());
+                    return Mono.just(mm);
+                })
+                .collectList()
+                .map(c -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(c))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/documentNumber/{documentNumber}/accountNumber/{accountNumber}/movements")
+    public Mono<ResponseEntity<BankAccountDto>> getMovementsOfBankAccountByDocumentNumberAndAccountType(@PathVariable("documentNumber") String documentNumber, @PathVariable("accountNumber") String accountNumber) {
+        return service.findMovementsByDocumentNumber(documentNumber, accountNumber)
+                .map(c -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(c))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }

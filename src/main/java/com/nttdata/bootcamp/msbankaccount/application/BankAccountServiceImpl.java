@@ -34,7 +34,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public Mono<Movement> findLastMovementByAccountNumber(String accountNumber) {
         log.info("ini----findLastMovementByAccountNumber-------: ");
         WebClientConfig webconfig = new WebClientConfig();
-        return webconfig.setUriData("http://localhost:8091/").flatMap(
+        return webconfig.setUriData("http://localhost:8083/").flatMap(
                 d -> {
                     return webconfig.getWebclient().get().uri("/api/movements/last/accountNumber/" + accountNumber).retrieve().bodyToMono(Movement.class);
                 }
@@ -45,7 +45,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         log.info("ini----findMovementsByAccountNumber-------: ");
         WebClientConfig webconfig = new WebClientConfig();
-        Flux<Movement> alerts = webconfig.setUriData("http://localhost:8091/")
+        Flux<Movement> alerts = webconfig.setUriData("http://localhost:8083/")
                 .flatMap(d -> {
                     return webconfig.getWebclient().get()
                             .uri("/api/movements/accountNumber/" + accountNumber)

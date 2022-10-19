@@ -14,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Client {
 
     @Id

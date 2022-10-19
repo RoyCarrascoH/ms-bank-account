@@ -48,6 +48,7 @@ public class BankAccount {
     @NotEmpty(message = "no debe estar vacío")
     private String currency;
 
+    private Double minimumAmount;
 
     private Double  Balance;
 }

@@ -4,6 +4,7 @@ import com.nttdata.bootcamp.msbankaccount.config.WebClientConfig;
 import com.nttdata.bootcamp.msbankaccount.dto.BankAccountDto;
 import com.nttdata.bootcamp.msbankaccount.exception.ResourceNotFoundException;
 import com.nttdata.bootcamp.msbankaccount.model.Client;
+import com.nttdata.bootcamp.msbankaccount.model.Credit;
 import com.nttdata.bootcamp.msbankaccount.model.Movement;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         log.info("ini----findMovementsByAccountNumber-------: ");
         WebClientConfig webconfig = new WebClientConfig();
-        Flux<Movement> alerts = webconfig.setUriData("http://localhost:8083/")
+        Flux<Movement> movements = webconfig.setUriData("http://localhost:8083/")
                 .flatMap(d -> {
                     return webconfig.getWebclient().get()
                             .uri("/api/movements/accountNumber/" + accountNumber)
@@ -54,7 +55,38 @@ public class BankAccountServiceImpl implements BankAccountService {
                             .collectList();
                 })
                 .flatMapMany(iterable -> Flux.fromIterable(iterable));
-        return alerts;
+        return movements;
+    }
+
+    public Flux<Credit> findCreditsByDocumentNumber(String documentNumber) {
+        log.info("Inicio----findCreditsByAccountNumber-------documentNumber: " + documentNumber);
+        WebClientConfig webconfig = new WebClientConfig();
+        Flux<Credit> credits = webconfig.setUriData("http://localhost:8084/")
+                .flatMap(d -> {
+                    return webconfig.getWebclient().get()
+                            .uri("api/credits/creditCard/" + documentNumber)
+                            .retrieve()
+                            .bodyToFlux(Credit.class)
+                            .collectList();
+                })
+                .flatMapMany(iterable -> Flux.fromIterable(iterable))
+                .doOnNext(cr -> log.info("findCreditsByDocumentNumber-------Credit: " + cr.toString()));
+        return credits;
+    }
+
+    public Mono<Movement> updateProfileClient(String documentNumber, String profile) {
+        log.info("--updateProfileClient------- documentNumber: " + documentNumber);
+        log.info("--updateProfileClient------- profile: " + profile);
+        WebClientConfig webconfig = new WebClientConfig();
+        return webconfig.setUriData("http://localhost:8080")
+                .flatMap(d -> {
+                            return webconfig.getWebclient().put()
+                                    .uri("/api/clients/documentNumber/" + documentNumber + "/profile/" + profile)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .retrieve()
+                                    .bodyToMono(Movement.class);
+                        }
+                );
     }
 
     @Override
@@ -120,26 +152,44 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public Mono<BankAccount> save(BankAccountDto bankAccountDto) {
-
         return findClientByDni(bankAccountDto.getDocumentNumber())
-                .flatMap(clnt -> {
-                    return validateNumberClientAccounts(clnt, bankAccountDto, "save").flatMap(o -> {
-                        return bankAccountDto.validateFields()
-                                .flatMap(at -> {
-                                    if (at.equals(true)) {
-                                        return bankAccountDto.MapperToBankAccount(clnt)
-                                                .flatMap(ba -> {
-                                                    log.info("sg MapperToBankAccount-------: ");
-                                                    //return Mono.just(ba);
-                                                    return bankAccountRepository.save(ba);
-                                                });
-                                    } else {
-                                        return Mono.error(new ResourceNotFoundException("Tipo Cuenta", "AccountType", bankAccountDto.getAccountType()));
-                                    }
-                                });
-                    });
-                });
+                .flatMap(clnt -> validateNumberClientAccounts(clnt, bankAccountDto, "save").then(Mono.just(clnt)))
+                .flatMap(clnt -> bankAccountDto.validateFields()
+                        .flatMap(at -> {
+                            if (at.equals(true)) {
+                                return bankAccountDto.MapperToBankAccount(clnt)
+                                        .flatMap(ba -> {
+                                            log.info("sg MapperToBankAccount-------: ");
+                                            return bankAccountRepository.save(ba)
+                                                    .flatMap(bac -> {
+                                                        log.info("validar credito para perfil: ");
+                                                        return verifyThatYouHaveACreditCard(clnt, bankAccountDto.getMinimumAmount())
+                                                                .then(Mono.just(bac));
+                                                    });
+                                        });
+                            } else {
+                                return Mono.error(new ResourceNotFoundException("Tipo Cuenta", "AccountType", bankAccountDto.getAccountType()));
+                            }
+                        })
+                );
+    }
 
+    public Mono<Void> verifyThatYouHaveACreditCard(Client client, Double minimumAmount) {
+        log.info("ini verifyThatYouHaveACreditCard-------: ");
+        return findCreditsByDocumentNumber(client.getDocumentNumber()).count()
+                .flatMap(cnt -> {
+                    log.info("--verifyThatYouHaveACreditCard------- cnt: " + cnt);
+                    if (cnt > 0) {
+                        String profile = client.getClientType().equals("Personal") ? "VIP" : client.getClientType().equals("Business") ? "PYME" : "0";
+                        if(minimumAmount == null){
+                            return updateProfileClient(client.getDocumentNumber(), "0").then(Mono.empty());
+                        }else{
+                            return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.empty());
+                        }
+                    }else{
+                        return updateProfileClient(client.getDocumentNumber(), "0").then(Mono.empty());
+                    }
+                });
     }
 
     public Mono<Boolean> validateNumberClientAccounts(Client client, BankAccountDto bankAccountDto, String method) {

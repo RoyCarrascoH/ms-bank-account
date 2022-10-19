@@ -46,6 +46,8 @@ public class BankAccountDto {
     @NotEmpty(message = "no debe estar vacío")
     private String currency;
 
+    private Double minimumAmount;
+
     private List<Movement> movements;
 
     public Mono<Boolean> validateFields() {

@@ -160,11 +160,13 @@ public class BankAccountServiceImpl implements BankAccountService {
                                 return bankAccountDto.MapperToBankAccount(clnt)
                                         .flatMap(ba -> {
                                             log.info("sg MapperToBankAccount-------: ");
-                                            return bankAccountRepository.save(ba)
-                                                    .flatMap(bac -> {
-                                                        log.info("validar credito para perfil: ");
-                                                        return verifyThatYouHaveACreditCard(clnt, bankAccountDto.getMinimumAmount())
-                                                                .then(Mono.just(bac));
+                                            return verifyThatYouHaveACreditCard(clnt, bankAccountDto.getMinimumAmount())
+                                                    .flatMap(o -> {
+                                                        log.info("sg--verifyThatYouHaveACreditCard-------o: " + o.toString());
+                                                        if (o.equals(true) && clnt.getClientType().equals("Business") && bankAccountDto.getAccountType().equals("Checking-account")) {
+                                                            ba.setCommission(0.0);
+                                                        }
+                                                        return bankAccountRepository.save(ba);
                                                     });
                                         });
                             } else {
@@ -174,20 +176,35 @@ public class BankAccountServiceImpl implements BankAccountService {
                 );
     }
 
-    public Mono<Void> verifyThatYouHaveACreditCard(Client client, Double minimumAmount) {
-        log.info("ini verifyThatYouHaveACreditCard-------: ");
+    public Mono<Boolean> verifyThatYouHaveACreditCard(Client client, Double minimumAmount) {
+        log.info("ini verifyThatYouHaveACreditCard-------minimumAmount: " + (minimumAmount == null ? "" : minimumAmount.toString()));
         return findCreditsByDocumentNumber(client.getDocumentNumber()).count()
                 .flatMap(cnt -> {
                     log.info("--verifyThatYouHaveACreditCard------- cnt: " + cnt);
+                    String profile = "0";
                     if (cnt > 0) {
-                        String profile = client.getClientType().equals("Personal") ? "VIP" : client.getClientType().equals("Business") ? "PYME" : "0";
-                        if(minimumAmount == null){
-                            return updateProfileClient(client.getDocumentNumber(), "0").then(Mono.empty());
-                        }else{
-                            return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.empty());
+                        if (client.getClientType().equals("Personal")) {
+                            if (minimumAmount == null) {
+                                log.info("1--verifyThatYouHaveACreditCard-------: ");
+                                return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.just(false));
+                            } else {
+                                log.info("2--verifyThatYouHaveACreditCard-------: ");
+                                profile = "VIP";
+                                return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.just(true));
+                            }
+                        } else if (client.getClientType().equals("Business")) {
+                            log.info("3--verifyThatYouHaveACreditCard-------: ");
+                            profile = "PYME";
+                            return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.just(true));
+
+                        } else {
+                            log.info("4--verifyThatYouHaveACreditCard-------: ");
+                            return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.just(false));
                         }
-                    }else{
-                        return updateProfileClient(client.getDocumentNumber(), "0").then(Mono.empty());
+
+                    } else {
+                        log.info("5--verifyThatYouHaveACreditCard-------: ");
+                        return updateProfileClient(client.getDocumentNumber(), profile).then(Mono.just(false));
                     }
                 });
     }

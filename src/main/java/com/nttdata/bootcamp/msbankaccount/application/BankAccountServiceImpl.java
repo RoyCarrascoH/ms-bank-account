@@ -268,6 +268,9 @@ public class BankAccountServiceImpl implements BankAccountService {
                                                     x.setListAuthorizedSignatories(bankAccountDto.getListAuthorizedSignatories());
                                                     x.setStartingAmount(bankAccountDto.getStartingAmount());
                                                     x.setCurrency(bankAccountDto.getCurrency());
+                                                    x.setMinimumAmount(bankAccountDto.getMinimumAmount());
+                                                    x.setTransactionLimit(bankAccountDto.getTransactionLimit());
+                                                    x.setCommissionTransaction(bankAccountDto.getCommissionTransaction());
                                                     return bankAccountRepository.save(x);
                                                 });
                                     } else {

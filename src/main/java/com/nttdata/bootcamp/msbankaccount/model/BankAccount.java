@@ -50,5 +50,9 @@ public class BankAccount {
 
     private Double minimumAmount;
 
+    private Double transactionLimit;
+
+    private Double commissionTransaction;
+
     private Double  Balance;
 }

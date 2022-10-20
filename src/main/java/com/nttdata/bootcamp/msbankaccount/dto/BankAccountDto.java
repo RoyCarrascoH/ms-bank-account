@@ -48,6 +48,10 @@ public class BankAccountDto {
 
     private Double minimumAmount;
 
+    private Double transactionLimit;
+
+    private Double commissionTransaction;
+
     private List<Movement> movements;
 
     public Mono<Boolean> validateFields() {
@@ -141,6 +145,9 @@ public class BankAccountDto {
                 .listAuthorizedSignatories(this.getListAuthorizedSignatories())
                 .startingAmount(this.getStartingAmount())
                 .currency(this.getCurrency())
+                .minimumAmount(this.getMinimumAmount())
+                .transactionLimit(this.getTransactionLimit())
+                .commissionTransaction(this.getCommissionTransaction())
                 .build();
         log.info("fn MapperToBankAccount-------: ");
         return Mono.just(bankAccount);

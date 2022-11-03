@@ -14,11 +14,20 @@ public interface BankAccountService {
 
     public Flux<BankAccount> findByDocumentNumber(String accountNumber, String accountType);
 
-    public Mono<BankAccountDto> findMovementsByDocumentNumber(String documentNumber, String accountNumber);
-
     public Mono<BankAccount> save(BankAccountDto bankAccountDto);
 
     public Mono<BankAccount> update(BankAccountDto bankAccountDto, String idBankAccount);
 
-    public Mono<Void> delete(BankAccount bankAccount);
+    public Mono<Void> delete(String idBankAccount);
+
+    public Mono<BankAccountDto> findMovementsByDocumentNumber(String documentNumber, String accountNumber);
+
+    public Flux<BankAccount> findByDocumentNumberAndWithdrawalAmount(String accountNumber, String cardNumber, Double withdrawalAmount);
+
+    public Mono<BankAccount> updateBalanceById(String idBankAccount, Double balance);
+
+    public Mono<BankAccount> findByDebitCardNumberAndIsMainAccount(String debitCardNumber);
+
+    public Flux<BankAccount> findBankAccountBalanceByDocumentNumber(String documentNumber);
+
 }

@@ -1,10 +1,10 @@
 package com.nttdata.bootcamp.msbankaccount.model;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Getter
@@ -20,5 +20,6 @@ public class Movement {
     private Double balance;
     private String currency;
     private Date movementDate;
+    private Double startingAmount;
 
 }

@@ -1,14 +1,16 @@
 package com.nttdata.bootcamp.msbankaccount.model;
 
-import java.util.Date;
 import java.util.List;
 
-import com.nttdata.bootcamp.msbankaccount.exception.ResourceNotFoundException;
-import lombok.*;
+import com.nttdata.bootcamp.msbankaccount.dto.DebitCardDto;
+import lombok.Builder;
+import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import reactor.core.publisher.Mono;
-
 import javax.validation.constraints.NotEmpty;
 
 @Document(collection = "BankAccount")
@@ -28,7 +30,8 @@ public class BankAccount {
     @NotEmpty(message = "no debe estar vacío")
     private String accountType;
 
-    private String cardNumber;
+    // private String cardNumber;
+    private DebitCardDto debitCard;
 
     @NotEmpty(message = "no debe estar vacío")
     private String accountNumber;
@@ -54,5 +57,5 @@ public class BankAccount {
 
     private Double commissionTransaction;
 
-    private Double  Balance;
+    private Double balance;
 }

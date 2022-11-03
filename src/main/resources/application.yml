@@ -1,0 +1,64 @@
+server:
+  port: 8085
+  error:
+    include-message: always
+local:
+  property:
+    host:
+      ms-client: localhost
+      ms-credits: localhost
+      ms-movement: localhost
+      ms-loan: localhost
+      ms-debit-card: localhost
+spring:
+  application:
+    name: service-bank-account
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/BankAccountDB
+      auto-index-creation: true
+  config:
+    import: optional:configserver:http://ms-config-server:8888
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9093/eureka
+resilience4j:
+  circuitbreaker:
+    instances:
+      clientCB:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 4
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 8
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 3
+      creditCB:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 4
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 8
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 3
+      debitcardCB:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 4
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 8
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 3
+      movementCB:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 4
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 8
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 3
+
+  retry:
+    instances:
+      usermsclientService:
+        maxRetryAttempts: 5
+        waitDuration: 10s
+message:
+  demo: leido desde local

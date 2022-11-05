@@ -41,7 +41,7 @@ public class SavingAccount extends BankAccountBean {
         });
     }
     @Override
-    public Mono<BankAccount> MapperToBankAccount(Client client) {
+    public Mono<BankAccount> mapperToBankAccount(Client client) {
         log.info("ini SavingAccount MapperToBankAccount-------: ");
         BankAccount bankAccount = BankAccount.builder()
                 .idBankAccount(this.getIdBankAccount())

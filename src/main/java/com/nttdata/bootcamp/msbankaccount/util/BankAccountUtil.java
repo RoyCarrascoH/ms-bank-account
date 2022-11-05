@@ -1,20 +1,26 @@
 package com.nttdata.bootcamp.msbankaccount.util;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+
+/**
+ * Class BankAccountUtil.
+ * BankAccount microservice class BankAccountUtil.
+ */
 @AllArgsConstructor
 @Component
 public class BankAccountUtil {
 
-	public static final String CLIENT_CB = "clientCB";
-	public static final String CREDIT_CB = "creditCB";
-	public static final String DEBITCARD_CB = "debitcardCB";
-	public static final String MOVEMENT_CB = "movementCB";
+    public static final String CLIENT_CB = "clientCB";
+    public static final String CREDIT_CB = "creditCB";
+    public static final String DEBITCARD_CB = "debitcardCB";
+    public static final String MOVEMENT_CB = "movementCB";
 
     public LocalDate dateToLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

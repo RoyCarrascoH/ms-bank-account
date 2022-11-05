@@ -1,13 +1,17 @@
 package com.nttdata.bootcamp.msbankaccount.dto;
 
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+/**
+ * Class DebitCardDto.
+ * BankAccount microservice class DebitCardDto.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

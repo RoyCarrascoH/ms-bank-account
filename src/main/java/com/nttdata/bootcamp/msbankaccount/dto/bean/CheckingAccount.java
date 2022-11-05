@@ -47,8 +47,8 @@ public class CheckingAccount extends BankAccountBean {
         });
     }
     @Override
-    public Mono<BankAccount> MapperToBankAccount(Client client) {
-        log.info("ini CheckingAccount MapperToBankAccount-------: ");
+    public Mono<BankAccount> mapperToBankAccount(Client client) {
+        log.info("ini CheckingAccount mapperToBankAccount-------: ");
         BankAccount bankAccount = BankAccount.builder()
                 .idBankAccount(this.getIdBankAccount())
                 .client(client)
@@ -65,7 +65,7 @@ public class CheckingAccount extends BankAccountBean {
                 .listHeadline(this.getListHeadline())
                 .listAuthorizedSignatories(this.getListAuthorizedSignatories())
                 .build();
-        log.info("fn CheckingAccount MapperToBankAccount-------: ");
+        log.info("fn CheckingAccount mapperToBankAccount-------: ");
         return Mono.just(bankAccount);
     }
 }

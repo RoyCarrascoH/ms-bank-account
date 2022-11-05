@@ -1,11 +1,14 @@
 package com.nttdata.bootcamp.msbankaccount.dto;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
+/**
+ * Class ErrorDetail.
+ * BankAccount microservice class ErrorDetail.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

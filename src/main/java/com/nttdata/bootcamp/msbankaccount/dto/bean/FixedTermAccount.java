@@ -45,7 +45,7 @@ public class FixedTermAccount extends BankAccountBean {
         });
     }
     @Override
-    public Mono<BankAccount> MapperToBankAccount(Client client) {
+    public Mono<BankAccount> mapperToBankAccount(Client client) {
         log.info("ini FixedTermAccount MapperToBankAccount-------: ");
         BankAccount bankAccount = BankAccount.builder()
                 .idBankAccount(this.getIdBankAccount())
@@ -63,7 +63,7 @@ public class FixedTermAccount extends BankAccountBean {
                 .transactionLimit(this.getTransactionLimit())
                 .commissionTransaction(this.getCommissionTransaction())
                 .build();
-        log.info("fn FixedTermAccount MapperToBankAccount-------: ");
+        log.info("fn FixedTermAccount mapperToBankAccount-------: ");
         return Mono.just(bankAccount);
     }
 }

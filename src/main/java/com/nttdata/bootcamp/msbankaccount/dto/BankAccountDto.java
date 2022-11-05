@@ -1,17 +1,23 @@
 package com.nttdata.bootcamp.msbankaccount.dto;
 
+import java.util.List;
 import com.nttdata.bootcamp.msbankaccount.dto.bean.CheckingAccount;
 import com.nttdata.bootcamp.msbankaccount.dto.bean.FixedTermAccount;
 import com.nttdata.bootcamp.msbankaccount.dto.bean.SavingAccount;
 import com.nttdata.bootcamp.msbankaccount.model.Headline;
 import com.nttdata.bootcamp.msbankaccount.model.Movement;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
+/**
+ * Class BankAccountDto.
+ * BankAccount microservice class BankAccountDto.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,8 +59,8 @@ public class BankAccountDto {
 
     private List<Movement> movements;
 
-    public Mono<SavingAccount> MapperToSavingAccount() {
-        log.info("ini MapperToSaving-------this: " + this.toString());
+    public Mono<SavingAccount> mapperToSavingAccount() {
+        log.info("ini mapperToSaving-------this: " + this.toString());
         SavingAccount savingAccount = SavingAccount.builder()
                 .idBankAccount(this.getIdBankAccount())
                 .documentNumber(this.getDocumentNumber())
@@ -70,12 +76,12 @@ public class BankAccountDto {
                 .transactionLimit(this.getTransactionLimit())
                 .commissionTransaction(this.getCommissionTransaction())
                 .build();
-        log.info("fn MapperToSaving-------: ");
-        log.info("fn MapperToSaving-------savingAccount: " + savingAccount.toString());
+        log.info("fn mapperToSaving-------: ");
+        log.info("fn mapperToSaving-------savingAccount: " + savingAccount.toString());
         return Mono.just(savingAccount);
     }
-    public Mono<FixedTermAccount> MapperToFixedTermAccount() {
-        log.info("ini MapperToFixedTermAccount-------: ");
+    public Mono<FixedTermAccount> mapperToFixedTermAccount() {
+        log.info("ini mapperToFixedTermAccount-------: ");
         FixedTermAccount fixedTermAccount = FixedTermAccount.builder()
                 .idBankAccount(this.getIdBankAccount())
                 .documentNumber(this.getDocumentNumber())
@@ -92,11 +98,11 @@ public class BankAccountDto {
                 .transactionLimit(this.getTransactionLimit())
                 .commissionTransaction(this.getCommissionTransaction())
                 .build();
-        log.info("fn MapperToFixedTermAccount-------: ");
+        log.info("fn mapperToFixedTermAccount-------: ");
         return Mono.just(fixedTermAccount);
     }
-    public Mono<CheckingAccount> MapperToCheckingAccount() {
-        log.info("ini MapperToCheckingAccount-------: ");
+    public Mono<CheckingAccount> mapperToCheckingAccount() {
+        log.info("ini mapperToCheckingAccount-------: ");
         CheckingAccount checkingAccount = CheckingAccount.builder()
                 .idBankAccount(this.getIdBankAccount())
                 .documentNumber(this.getDocumentNumber())
@@ -113,7 +119,7 @@ public class BankAccountDto {
                 .listHeadline(this.getListHeadline())
                 .listAuthorizedSignatories(this.getListAuthorizedSignatories())
                 .build();
-        log.info("fn MapperToCheckingAccount-------: ");
+        log.info("fn mapperToCheckingAccount-------: ");
         return Mono.just(checkingAccount);
     }
 

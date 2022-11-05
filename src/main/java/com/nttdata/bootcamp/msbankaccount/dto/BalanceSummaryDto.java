@@ -1,15 +1,19 @@
 package com.nttdata.bootcamp.msbankaccount.dto;
 
+import java.util.List;
 import com.nttdata.bootcamp.msbankaccount.model.Movement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 
+/**
+ * Class BalanceSummaryDto.
+ * BankAccount microservice class BalanceSummaryDto.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

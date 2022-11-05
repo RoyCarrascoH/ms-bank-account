@@ -1,11 +1,15 @@
 package com.nttdata.bootcamp.msbankaccount.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Class ResourceNotFoundException.
+ * MobileWallet microservice class ResourceNotFoundException.
+ */
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Getter
 @Setter

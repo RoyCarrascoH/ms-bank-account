@@ -45,7 +45,7 @@ public class BankAccountController {
     }
 
     @GetMapping("/debitCardNumber/{debitCardNumber}")
-    public Mono<ResponseEntity<BankAccount>> getBankAccountByDebitCardNumber( @PathVariable("debitCardNumber") String debitCardNumber) {
+    public Mono<ResponseEntity<BankAccount>> getBankAccountByDebitCardNumber(@PathVariable("debitCardNumber") String debitCardNumber) {
         log.info("GetMapping--getBankAccountByDebitCardNumber-------debitCardNumber: " + debitCardNumber);
         return service.findByDebitCardNumberAndIsMainAccount(debitCardNumber).map(c -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(c))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
@@ -107,7 +107,7 @@ public class BankAccountController {
     }
 
     @GetMapping("/documentNumber/{documentNumber}")
-    public Mono<ResponseEntity<List<BankAccount>>> getBankAccountBalanceByDocumentNumber(@PathVariable("documentNumber") String documentNumber ) {
+    public Mono<ResponseEntity<List<BankAccount>>> getBankAccountBalanceByDocumentNumber(@PathVariable("documentNumber") String documentNumber) {
         return service.findBankAccountBalanceByDocumentNumber(documentNumber)
                 .collectList()
                 .map(c -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(c))

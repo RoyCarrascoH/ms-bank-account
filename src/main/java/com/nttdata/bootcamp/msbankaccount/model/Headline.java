@@ -1,10 +1,14 @@
 package com.nttdata.bootcamp.msbankaccount.model;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * Class Headline.
+ * BankAccount microservice class Headline.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

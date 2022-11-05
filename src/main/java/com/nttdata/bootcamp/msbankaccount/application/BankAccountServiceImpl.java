@@ -11,7 +11,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -79,11 +78,11 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .flatMap(badto -> setDebitCard(badto))
                 .flatMap(badto -> {
                     if (badto.getAccountType().equals("Savings-account")) { // cuenta de ahorros.
-                        return badto.MapperToSavingAccount();
+                        return badto.mapperToSavingAccount();
                     } else if (badto.getAccountType().equals("FixedTerm-account")) { // cuenta plazos fijos.
-                        return badto.MapperToFixedTermAccount();
+                        return badto.mapperToFixedTermAccount();
                     } else if (badto.getAccountType().equals("Checking-account")) { // current account.
-                        return badto.MapperToCheckingAccount();
+                        return badto.mapperToCheckingAccount();
                     } else {
                         return Mono.error(new ResourceNotFoundException("Tipo Cuenta", "AccountType", badto.getAccountType()));
                     }
@@ -92,7 +91,7 @@ public class BankAccountServiceImpl implements BankAccountService {
                         .switchIfEmpty(Mono.error(new ResourceNotFoundException("Cliente", "DocumentNumber", mba.getDocumentNumber())))
                         .flatMap(clnt -> validateNumberClientAccounts(clnt, mba, "save").then(Mono.just(clnt)))
                         .flatMap(clnt -> mba.validateFields()
-                                .flatMap(at -> mba.MapperToBankAccount(clnt))
+                                .flatMap(at -> mba.mapperToBankAccount(clnt))
                                 .flatMap(ba -> verifyThatYouHaveACreditCard(clnt, mba.getMinimumAmount())
                                         .flatMap(o -> {
                                             ba.setBalance(ba.getStartingAmount());
@@ -162,11 +161,11 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .flatMap(badto -> setDebitCard(badto))
                 .flatMap(badto -> {
                     if (badto.getAccountType().equals("Savings-account")) { // cuenta de ahorros.
-                        return badto.MapperToSavingAccount();
+                        return badto.mapperToSavingAccount();
                     } else if (badto.getAccountType().equals("FixedTerm-account")) { // cuenta plazos fijos.
-                        return badto.MapperToFixedTermAccount();
+                        return badto.mapperToFixedTermAccount();
                     } else if (badto.getAccountType().equals("Checking-account")) { // current account.
-                        return badto.MapperToCheckingAccount();
+                        return badto.mapperToCheckingAccount();
                     } else {
                         return Mono.error(new ResourceNotFoundException("Tipo Cuenta", "AccountType", badto.getAccountType()));
                     }
@@ -174,7 +173,7 @@ public class BankAccountServiceImpl implements BankAccountService {
                         .switchIfEmpty(Mono.error(new ResourceNotFoundException("Cliente", "DocumentNumber", mba.getDocumentNumber())))
                         .flatMap(clnt -> validateNumberClientAccounts(clnt, mba, "update").then(Mono.just(clnt)))
                         .flatMap(clnt -> mba.validateFields()
-                                .flatMap(at -> mba.MapperToBankAccount(clnt))
+                                .flatMap(at -> mba.mapperToBankAccount(clnt))
                                 .flatMap(ba -> verifyThatYouHaveACreditCard(clnt, mba.getMinimumAmount())
                                         .flatMap(o -> {
                                             if (o.equals(true) && clnt.getClientType().equals("Business") && mba.getAccountType().equals("Checking-account")) {

@@ -1,11 +1,14 @@
 package com.nttdata.bootcamp.msbankaccount.exception;
 
-
+import org.springframework.http.HttpStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
+/**
+ * Class BlogAppException.
+ * MobileWallet microservice class BlogAppException.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

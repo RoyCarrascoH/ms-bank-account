@@ -1,14 +1,20 @@
 package com.nttdata.bootcamp.msbankaccount.dto.bean;
 
+import java.util.List;
 import com.nttdata.bootcamp.msbankaccount.dto.DebitCardDto;
 import com.nttdata.bootcamp.msbankaccount.model.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
+/**
+ * Class BankAccountBean.
+ * BankAccount microservice class BankAccountBean.
+ */
 @AllArgsConstructor
 @Getter
 @Setter
@@ -38,5 +44,5 @@ public abstract class BankAccountBean {
     public abstract Mono<Boolean> validateFields();
     public abstract Mono<Boolean> validateCommissionByAccountType();
     public abstract Mono<Boolean> validateMovementsByAccountType();
-    public abstract Mono<BankAccount> MapperToBankAccount(Client client);
+    public abstract Mono<BankAccount> mapperToBankAccount(Client client);
 }

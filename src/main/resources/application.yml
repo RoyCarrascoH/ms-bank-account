@@ -19,6 +19,13 @@ spring:
       auto-index-creation: true
   config:
     import: optional:configserver:http://ms-config-server:8888
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: myGroup
+    topic:
+      bank:
+        name: bank-account-topic
 eureka:
   client:
     service-url:

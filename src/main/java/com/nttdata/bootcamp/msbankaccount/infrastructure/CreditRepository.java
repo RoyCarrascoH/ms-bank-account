@@ -17,14 +17,14 @@ import reactor.core.publisher.Mono;
 @Repository
 @Slf4j
 public class CreditRepository {
-    
+
     @Value("${local.property.host.ms-credits}")
     private String propertyHostMsCredits;
 
     @Autowired
     ReactiveCircuitBreakerFactory reactiveCircuitBreakerFactory;
 
-	@CircuitBreaker(name = BankAccountUtil.CREDIT_CB, fallbackMethod = "getDefaultCreditsByDocumentNumber")
+    @CircuitBreaker(name = BankAccountUtil.CREDIT_CB, fallbackMethod = "getDefaultCreditsByDocumentNumber")
     public Flux<Credit> findCreditsByDocumentNumber(String documentNumber) {
         log.info("Inicio----findCreditsByAccountNumber-------documentNumber: " + documentNumber);
         WebClientConfig webconfig = new WebClientConfig();
@@ -41,8 +41,8 @@ public class CreditRepository {
         return credits;
     }
 
-	public Flux<Credit> getDefaultCreditsByDocumentNumber(String documentNumber, Exception e) {
-		log.info("Inicio----getDefaultCreditsByDocumentNumber-------documentNumber: " + documentNumber);
-		return Flux.empty();
-	}
+    public Flux<Credit> getDefaultCreditsByDocumentNumber(String documentNumber, Exception e) {
+        log.info("Inicio----getDefaultCreditsByDocumentNumber-------documentNumber: " + documentNumber);
+        return Flux.empty();
+    }
 }

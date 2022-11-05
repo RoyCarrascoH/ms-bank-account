@@ -20,7 +20,7 @@ public class ClientRepository {
 
     @Value("${local.property.host.ms-client}")
     private String propertyHostMsClient;
-    
+
     @Autowired
     ReactiveCircuitBreakerFactory reactiveCircuitBreakerFactory;
 
@@ -29,9 +29,9 @@ public class ClientRepository {
         WebClientConfig webconfig = new WebClientConfig();
         return webconfig.setUriData("http://" + propertyHostMsClient + ":8080")
                 .flatMap(d -> webconfig.getWebclient().get().uri("/api/clients/documentNumber/" + documentNumber).retrieve()
-                        .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Error 400")))
-                        .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new Exception("Error 500")))
-                        .bodyToMono(Client.class)
+                                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Error 400")))
+                                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new Exception("Error 500")))
+                                .bodyToMono(Client.class)
                         // .transform(it -> reactiveCircuitBreakerFactory.create("parameter-service").run(it, throwable -> Mono.just(new Client())))
                 );
     }
@@ -41,21 +41,21 @@ public class ClientRepository {
         WebClientConfig webconfig = new WebClientConfig();
         return webconfig.setUriData("http://" + propertyHostMsClient + ":8080")
                 .flatMap(d -> webconfig.getWebclient().put()
-                        .uri("/api/clients/documentNumber/" + documentNumber + "/profile/" + profile)
-                        .accept(MediaType.APPLICATION_JSON).retrieve()
-                        .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Error 400")))
-                        .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new Exception("Error 500")))
-                        .bodyToMono(Void.class)
+                                .uri("/api/clients/documentNumber/" + documentNumber + "/profile/" + profile)
+                                .accept(MediaType.APPLICATION_JSON).retrieve()
+                                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Error 400")))
+                                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new Exception("Error 500")))
+                                .bodyToMono(Void.class)
                         // .transform(it -> reactiveCircuitBreakerFactory.create("parameter-service").run(it, throwable -> Mono.empty()))
                 );
     }
-    
+
     public Mono<Client> getDefaultClientByDni(String documentNumber, Exception e) {
-	    return Mono.empty();
+        return Mono.empty();
     }
 
     public Mono<Void> getDefaultUpdateProfileClient(String documentNumber, String profile, Exception e) {
-	    return Mono.empty();
+        return Mono.empty();
     }
 
 }

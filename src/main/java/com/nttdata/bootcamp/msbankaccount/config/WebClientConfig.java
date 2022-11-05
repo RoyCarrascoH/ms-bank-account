@@ -14,12 +14,12 @@ public class WebClientConfig {
     private WebClient webclient;
     private String Url = "";
 
-    public Mono<String> setUriData(String getUrl){
+    public Mono<String> setUriData(String getUrl) {
 
         return Mono.just(getUrl).flatMap(
-                u ->{
-                    if(!Url.equals(getUrl)){
-                        this.webclient =  WebClient.builder().baseUrl(u).build();
+                u -> {
+                    if (!Url.equals(getUrl)) {
+                        this.webclient = WebClient.builder().baseUrl(u).build();
                         setUrl(getUrl);
                     }
                     return Mono.just(u);

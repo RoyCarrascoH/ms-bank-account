@@ -1,6 +1,0 @@
-projectKey=com.nttdata.bootcamp:ms-bank-account
-serverUrl=http://localhost:9000
-serverVersion=9.7.1.62043
-dashboardUrl=http://localhost:9000/dashboard?id=com.nttdata.bootcamp%3Ams-bank-account
-ceTaskId=AYQwwwpkbx2TDfRCa-Eu
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYQwwwpkbx2TDfRCa-Eu

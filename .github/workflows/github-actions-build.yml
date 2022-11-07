@@ -23,7 +23,7 @@ jobs:
   - name: Publish to Docker Hub
     uses: docker/build-push-action@v1
     with:
-      username: ${{ secrets.DOCKER_USERNAME }}
+      username: ${{ secrets.roycarrascoh }}
       password: ${{ secrets.DOCKER_PASSWORD }}
-      repository: juniorhr/ms-bank-account
+      repository: RoyCarrascoH/ms-bank-account
       tags: ${{ github.run_number }}

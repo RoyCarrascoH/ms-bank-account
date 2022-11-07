@@ -304,6 +304,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public Flux<BankAccount> findBankAccountBalanceByDocumentNumber(String documentNumber) {
         return bankAccountRepository.findBankAccountBalanceByDocumentNumber(documentNumber)
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Cliente", "documentNumber", documentNumber)));
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Cliente", "documentNumber", documentNumber)))
+                .doOnNext( d -> log.info("--findBankAccountBalanceByDocumentNumber-------: " + documentNumber) )
+                .doOnNext( d -> log.info("--findBankAccountBalanceByDocumentNumber-------: " + d) );
     }
 }
